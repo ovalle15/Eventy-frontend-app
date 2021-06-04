@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from  '@angular/common/http';
 
+
 @Injectable({
   providedIn: 'root'
 })
@@ -8,19 +9,19 @@ export class LocationEventService {
 
   constructor(private http: HttpClient) { }
 
-  getEventsForScope(scope: any, fromDate:any, toDate:any){
-    const accessToken = '-hKGRZ-x8_U1HYxRtHuhOxM1X_9hEPg2Ro6Hy1fF';
-    const headers = {'Authorization': `Bearer ${accessToken}`};
-    console.log('https://api.predicthq.com/v1/events', {headers});
+  getEventsForScope(cityEvent: any, fromDate:any, toDate:any){
+    const accessToken = 'tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5';
+    const headers = {'Authorization': `Bearer ${accessToken}`,
+                    'Access-Control-Allow-Origin': 'http://localhost:4200/'};
+    // console.log('https://app.ticketmaster.com/discovery/v2/events', {headers});
 
-   return this.http.get<any>(
-
-     'https://api.predicthq.com/v1/events/?place.scope='+ scope +
-      "&active.gte=" + fromDate +
-      "&active.lte=" + toDate +
-      "&category=expos,concerts,performing-arts"
-      , {headers}
- );
+   return this.http.get(
+     'https://app.ticketmaster.com/discovery/v2/events.json?size=10&countryCode=US&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5' +
+      "&startDateTime=" + fromDate +
+      "&endDateTime=" + toDate +
+      "&city=" + cityEvent
+    );
  }
 
 }
+//https://app.ticketmaster.com/discovery/v2/events.json?size=1&startDateTime=2021-06-07T14:00:00Z&endDateTime=2021-06-10T14:00:00Z&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5

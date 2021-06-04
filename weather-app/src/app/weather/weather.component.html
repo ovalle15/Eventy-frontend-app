@@ -225,26 +225,26 @@
           <h3>
             Things To Do Today and Tomorrow in : {{this.weatherData?.location.name}}
           </h3>
-          <div *ngFor="let event of this.eventsToDisplay">
+          <div *ngFor="let event of this.eventsToDisplay._embedded.events">
             <li>
                 <h4>
-                  {{event.title}}
+                  {{event.name}}
                 </h4>
-                <br *ngIf="event.description">
-                  {{event.description}}
+                <br *ngIf="event.info">
+                  {{event.info}}
                 <br>
-                  Time: {{event.start}}
+                  Time: {{event.dates.start.localDate}}
                 <br>
-                <p *ngIf="event.entities[0] ; else elseBlock">
+                <!-- <p *ngIf="event.entities[0] ; else elseBlock">
                   Location :{{event.entities[0].name}}
                   {{event.entities[0].formatted_address}}
-                </p>
+                </p> -->
                 <br>
-                <span *ngIf="event.location;  else elseBlock">
+                <!-- <span *ngIf="event.location;  else elseBlock">
                   <button class="locMap" (click) = "showOnMap(event.location)">
                     Display Location
                   </button>
-                </span>
+                </span> -->
                 <br>
                 <ng-template #elseBlock>
                   <a>

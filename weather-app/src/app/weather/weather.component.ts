@@ -39,12 +39,15 @@ export class WeatherComponent implements OnInit  {
   public dayUnique: any = new Date().getDate()
   public map:any =null;
   public allEventsLocation = []
+  public stateEvent: any;
+  public cityEvent: any;
+  public dateForEvents: any = new Date();
+  public dateForEventsNext: any = new Date()
 
 
   constructor(
     private formBuilder: FormBuilder,
     private weatherService: WeatherStackService,
-    private events: Events,
     private eventPerLocations:  LocationEventService
     ){
     this.weatherSearchForm = this.formBuilder.group({
@@ -52,36 +55,39 @@ export class WeatherComponent implements OnInit  {
     })
   }
   ngOnInit() {
+
+    this.dateForEvents = this.dateForEvents.toISOString().split('.')[0]+"Z";
+    this.dateForEventsNext = this.dateForEventsNext.setDate(this.dateForEventsNext.getDate() + 1)
+    this.dateForEventsNext = new Date(this.dateForEventsNext).toISOString().split('.')[0]+"Z"
+
+    console.log("this is today", this.dateForEvents)
+    console.log("this is tomorrow", this.dateForEventsNext)
+
     this.currentDate = this.formatDate(this.currentDate)
+    console.log("this is the date format", this.currentDate)
     this.weatherSearchForm = this.formBuilder.group({
-      location: []
+      location: ['Boston']
     });
   }
 
   formatDate(currentDate: any ) {
     var d = new Date(currentDate),
     month = '' + ("0" + (d.getMonth() + 1)).slice(-2),
-    day = '' + this.dayUnique ,
+    day = '' + ("0" + this.dayUnique ).slice(-2),
     year =  d.getFullYear()
     return [year, month, day].join('-');
   }
 
-  formatRealDate(eventDateToday: any) {
-    var d = new Date(eventDateToday),
-    month = '' + ("0" + (d.getMonth() + 1)).slice(-2),
-    day = '' + (this.dayUnique + 1),
-    year =  d.getFullYear()
-    return [year, month, day].join('-');
-  }
 
   sendToWeatherStack(formValues: any) {
     this.loc = formValues.location;
     console.log("formValues.location", formValues.location)
+    console.log("this is currentDate send to weatherStack", this.currentDate)
     this.weatherService
       .getWeather(formValues.location, this.currentDate, this.currentDate)
       .subscribe(data => {
         this.weatherData = data;
-        console.log("this is weather data",this.weatherData)
+        console.log("this is weather data", this.weatherData)
       });
   }
 
@@ -93,21 +99,16 @@ export class WeatherComponent implements OnInit  {
         this.map._container.removeAttribute('class');
         this.map = null
     }
-    this.events
-      .getEvents(this.loc)
-      .subscribe(events => {
-        this.eventScopeId = events.results[0].id;
-        this.sendEventsPerLocation();
-      })
+    this.sendEventsPerLocation();
   }
 
   sendEventsPerLocation() {
-    this.eventDateToday = this.formatRealDate(this.eventDateToday)
     this.eventPerLocations
-      .getEventsForScope(this.eventScopeId, this.eventDateToday, this.eventDateToday)
+      .getEventsForScope(this.loc, this.dateForEvents , this.dateForEventsNext)
       .subscribe(e => {
-        this.eventsToDisplay = e.results;
-        console.log("this are the events per location", this.eventsToDisplay)
+        this.eventsToDisplay = e;
+        this.eventsToDisplay = this.eventsToDisplay._embedded.events
+        console.log("events ===>",this.eventsToDisplay._embedded.events)
         if (this.eventsToDisplay.length === 0) {
           window.alert("No events were found for this location")
         }
