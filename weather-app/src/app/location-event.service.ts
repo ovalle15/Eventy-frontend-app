@@ -16,7 +16,7 @@ export class LocationEventService {
     // console.log('https://app.ticketmaster.com/discovery/v2/events', {headers});
 
    return this.http.get(
-     'https://app.ticketmaster.com/discovery/v2/events.json?size=10&countryCode=US&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5' +
+     'https://app.ticketmaster.com/discovery/v2/events.json?size=6&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5' +
       "&startDateTime=" + fromDate +
       "&endDateTime=" + toDate +
       "&city=" + cityEvent

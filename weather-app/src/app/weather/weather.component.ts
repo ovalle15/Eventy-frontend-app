@@ -108,7 +108,7 @@ export class WeatherComponent implements OnInit  {
       .subscribe(e => {
         this.eventsToDisplay = e;
         this.eventsToDisplay = this.eventsToDisplay._embedded.events
-        console.log("events ===>",this.eventsToDisplay._embedded.events)
+        console.log("events ===>",this.eventsToDisplay)
         if (this.eventsToDisplay.length === 0) {
           window.alert("No events were found for this location")
         }
@@ -117,6 +117,9 @@ export class WeatherComponent implements OnInit  {
 
   showOnMap(pos: any) {
       console.log("This is location for map ===>", pos)
+      pos = Object.values(pos)
+      console.log("pos array === >", pos)
+
       if (this.map ){
           this.map.off();
           this.map.remove();
