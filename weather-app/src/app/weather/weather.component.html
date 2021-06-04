@@ -1,0 +1,267 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <link src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin=""/>
+      <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+          integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+          crossorigin=""></script>
+      <br>
+      <!-- <h1>Eventlyify?</h1> -->
+      <img class="banner_weatherstack" src="https://weatherstack.com/site_images/weatherstack_logo_footer.png">
+      <img class="banner_predicthq" src="https://docs.predicthq.com/img/logo.png">
+
+      <form [formGroup]="weatherSearchForm" (ngSubmit)="sendToWeatherStack(weatherSearchForm.value); sendEvents()">
+        <div>
+          <input
+            type="text"
+            placeholder="Please input a Location"
+            formControlName="location"
+          />
+        </div>
+        <div class="text-center">
+          <button type="submit">
+            Search for events
+          </button>
+        </div>
+      </form>
+      <div class="weather-animated" *ngIf="this.weatherData && this.eventsToDisplay; else elseBlock">
+        <div class="location_top_box" >
+          {{this.weatherData?.location.name}}, {{this.weatherData?.location.region}},{{this.weatherData?.location.country}}
+        </div>
+        <div class="current_left" *ngIf="this.weatherData.current.weather_descriptions[0] === 'Partly cloudy' ||
+                                        this.weatherData.current.weather_descriptions[0] === 'Cloudy' ||
+                                        this.weatherData.current.weather_descriptions[0] === 'Mist' ||
+                                        this.weatherData.current.weather_descriptions[0] === 'Overcast' ||
+                                        this.weatherData.current.weather_descriptions[0] === 'Fog';
+                                        else FirstSvg">
+          <a>
+            <img class="svg_scaling" src="assets/svgs/cloudy.svg">
+            <h1>
+              {{this.weatherData?.current.temperature}}
+              <span>
+                &#176;
+              </span>
+              F
+            </h1>
+            {{this.weatherData?.current.weather_descriptions[0]}}
+          </a>
+        </div>
+
+        <ng-template #FirstSvg>
+          <div class="current_left" *ngIf="this.weatherData?.current.weather_descriptions[0] === 'Light Rain' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Light rain' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Patchy light rain' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Moderate rain at times' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Patchy rain possible' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Light drizzle' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Light rain shower' ||
+                                            this.weatherData?.current.weather_descriptions[0] === 'Moderate rain' ||
+                                            this.weatherData?.current.weather_descriptions[0] ===  'Light Rain, Mist';
+                                            else thunderBlock">
+            <a>
+              <img class="svg_scaling" src="assets/svgs/slight_rain.svg">
+              <h1>
+                {{this.weatherData?.current.temperature}}
+                <span>
+                  &#176;
+                </span>
+                F
+              </h1>
+              {{this.weatherData?.current.weather_descriptions[0]}}
+            </a>
+          </div>
+        <ng-template #thunderBlock>
+          <div class="current_left" *ngIf="this.weatherData?.current.weather_descriptions[0] === 'Thunderstorm' ||
+                                    this.weatherData?.current.weather_descriptions[0] === 'Rain With Thunderstorm, Drizzle';
+                                      else ElseBlock">
+            <a>
+              <img class="svg_scaling" src="assets/svgs/thunder.svg">
+              <h1>{{this.weatherData?.current.temperature}}
+                <span>
+                  &#176;
+                </span>
+                F
+              </h1>
+              {{this.weatherData?.current.weather_descriptions[0]}}
+            </a>
+          </div>
+        </ng-template>
+
+        </ng-template>
+
+        <ng-template #ElseBlock>
+          <div class="current_left">
+            <a>
+              <img class="svg_scaling" src="assets/svgs/partly_cloudy.svg">
+              <h1>
+                {{this.weatherData?.current.temperature}}
+                <span>
+                  &#176;
+                </span>
+                F
+              </h1>
+              {{this.weatherData?.current.weather_descriptions[0]}}
+            </a>
+          </div>
+        </ng-template>
+
+        <div class="current_middle">
+          <ul class="current_type">
+            <li>
+              Humidity: &nbsp;{{this.weatherData?.current.humidity}} %
+            </li>
+            <li>
+              Wind Speed:&nbsp; {{this.weatherData?.current.wind_speed}}  kmph
+            </li>
+            <li>
+              Uv Index: &nbsp; {{this.weatherData?.current.uv_index}} mW/cm2
+            </li>
+            <li>
+              Feels Like:  &nbsp;{{this.weatherData?.current.feelslike}}
+              <span>
+                &#176;
+              </span>
+              F
+            </li>
+            <li>
+              Precipitation: &nbsp; {{this.weatherData?.current.precip}}mm
+            </li>
+          </ul>
+        </div>
+
+        <div class="forecast_week">
+          <div class="day" *ngFor="let hour of this.weatherData?.historical[this.currentDate].hourly">
+            <p>
+              {{  hour.time | dateformatting }}
+            </p>
+            <div *ngIf="hour.weather_descriptions[0] === 'Partly cloudy' ||
+                        hour.weather_descriptions[0] === 'Cloudy'  ||
+                        hour.weather_descriptions[0] === 'Mist' ||
+                        hour.weather_descriptions[0] === 'Overcast' ||
+                        hour.weather_descriptions[0] === 'Fog' ;
+                        else notCloudy">
+              <img  src="assets/svgs/cloudy.svg">
+              <p>
+                {{hour.temperature}}
+                <span>
+                  &#176;
+                </span>
+                F
+              </p>
+              <p>
+                {{hour.weather_descriptions[0]}}
+              </p>
+            </div>
+
+            <ng-template #notCloudy>
+              <div *ngIf= " hour.weather_descriptions[0] === 'Light Rain' ||
+                            hour.weather_descriptions[0] ===  'Light rain' ||
+                            hour.weather_descriptions[0] ===  'Patchy light rain' ||
+                            hour.weather_descriptions[0] ===  'Moderate rain at times' ||
+                            hour.weather_descriptions[0] ===  'Patchy rain possible' ||
+                            hour.weather_descriptions[0] ===  'Light drizzle' ||
+                            hour.weather_descriptions[0] ===  'Light rain shower' ||
+                            hour.weather_descriptions[0] ===  'Moderate rain' ||
+                            hour.weather_descriptions[0] === 'Light Rain, Mist' ;
+                            else thunderSvg" >
+                <img  src="assets/svgs/slight_rain.svg">
+                <p>
+                  {{hour.temperature}}
+                  <span>
+                    &#176;
+                  </span>
+                  F
+                </p>
+                <p>
+                  {{hour.weather_descriptions[0]}}
+                </p>
+              </div>
+            </ng-template>
+
+            <ng-template #thunderSvg>
+              <div *ngIf="hour.weather_descriptions[0] === 'Thunderstorm' ||
+                          hour.weather_descriptions[0] === 'Rain With Thunderstorm, Drizzle' ;
+                          else allOtherSvgs">
+                <img src="assets/svgs/thunder.svg">
+                <p>
+                  {{hour.temperature}}
+                  <span>
+                    &#176;
+                  </span>
+                    F
+                </p>
+                <p>
+                  {{hour.weather_descriptions[0]}}
+                </p>
+              </div>
+            </ng-template>
+
+            <ng-template #allOtherSvgs>
+              <img  src="assets/svgs/partly_cloudy.svg">
+                <p>
+                  {{hour.temperature}}
+                  <span>
+                    &#176;
+                  </span>
+                  F
+                </p>
+                <p>
+                  {{hour.weather_descriptions[0]}}
+                </p>
+            </ng-template>
+
+          </div>
+        </div>
+
+        <br>
+        <br>
+
+        <div id="mapid">
+        </div>
+
+        <div class="weather-animated-left">
+          <h3>
+            Things To Do Today and Tomorrow in : {{this.weatherData?.location.name}}
+          </h3>
+          <div *ngFor="let event of this.eventsToDisplay">
+            <li>
+                <h4>
+                  {{event.title}}
+                </h4>
+                <br *ngIf="event.description">
+                  {{event.description}}
+                <br>
+                  Time: {{event.start}}
+                <br>
+                <p *ngIf="event.entities[0] ; else elseBlock">
+                  Location :{{event.entities[0].name}}
+                  {{event.entities[0].formatted_address}}
+                </p>
+                <br>
+                <span *ngIf="event.location;  else elseBlock">
+                  <button class="locMap" (click) = "showOnMap(event.location)">
+                    Display Location
+                  </button>
+                </span>
+                <br>
+                <ng-template #elseBlock>
+                  <a>
+                    No event address found
+                  </a>
+                </ng-template>
+                <br>
+              </li>
+          </div>
+        </div>
+
+      </div>
+
+      <ng-template  #elseBlock>
+        <img class="main" src='https://weatherstack.com/site_images/world_map_vector.svg'>
+      </ng-template>
+
+    </div>
+  </div>
+</div>

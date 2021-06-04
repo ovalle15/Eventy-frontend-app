@@ -1,0 +1,179 @@
+/* You can add global styles to this file, and also import other style files */
+
+
+html, body {
+    height: 100%;
+    background-image: url("./assets/svgs/background_mountains.svg") ;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-color: #16394c;
+}
+h3 {
+    font-size: 14px;
+    text-transform: uppercase;
+}
+body {
+    margin: 0;
+    font-family: Roboto,
+    "Helvetica Neue", sans-serif;
+}
+button {
+    white-space: nowrap;
+    width: 158px;
+    height: 38px;
+    border-radius: 13px;
+    padding: 10px 12px;
+    font-size: 10px;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: #fff;
+    margin-right: 5px;
+    box-shadow: 0 4px 6px rgb(50 50 93 / 5%), 0 1px 3px rgb(0 0 0 / 5%);
+    border: 1px solid transparent;
+    line-height: 1.42857;
+    background: #f47b21;
+    margin-top: 7px;
+    text-align: center;
+    margin-left: 46em;
+}
+
+input[type=text]{
+    -webkit-border-radius: 20px;
+    -moz-border-radius: 20px;
+     border-radius: 20px;
+     border: 1px solid #2d9fd9;
+     color: #2d9fd9;
+     width: 250px;
+     height: 30px;
+     padding-left: 10px;
+     margin-left: 30em;
+    }
+
+input[type=text]:focus {
+     outline: none;
+     border: 1px solid #a0d18c;
+     color: #2d9fd9;
+}
+.main {
+    display: inherit;
+    margin-top: 24%;
+    margin-right: -99%;
+    position: relative;
+}
+
+.weather-animated {
+    height: 477px;
+    width: 511px;
+    border-radius: 10px;
+    right: 15px;
+    border: 4px solid #608094;
+    box-sizing: border-box;
+    margin-left: 42em;
+    margin-bottom: 20%;
+    margin-top: 22%
+
+}
+.weather-animated-left {
+    height: 449px;
+    width: 480px;
+    border-radius: 10px;
+    right: 15px;
+    box-sizing: border-box;
+    margin-right: 36em;
+    margin-bottom: 20%;
+    margin-top: -171%;
+    margin-left: -108%;
+    color:#fff ;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+    font-size: medium;
+    list-style: none;
+}
+.weather-animated-left h4 {
+    font-size: medium;
+    font-family: Marker Felt, fantasy;
+
+}
+.weather-animated-left h3 {
+    font-size: large;
+    font-family: Marker Felt, fantasy;
+
+}
+.weather-animated-left h3:after
+{
+    content:' ';
+    display:block;
+    border:2px solid  #608094;
+}
+
+.location_top_box {
+    color:#fff ;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+    text-align: center;
+    font-size: large;
+    margin-top: 5%
+}
+
+.current_left {
+    color:#fff ;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+    text-align: center;
+    width: 140px;
+    height: 137px;
+    left: 22px;
+    display: inline-block;
+    margin-bottom: 20%;
+
+}
+.current_middle {
+    display:inline-block;
+    margin-top: 12%;
+    margin-right: 16%;
+    color:#fff ;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+
+}
+.current_type {
+    list-style: none
+}
+.forecast_type {
+    list-style: none;
+    font-size: 10%;
+}
+
+.svg_scaling {
+    width: 82%;
+}
+.forecast_week {
+    box-sizing: border-box;
+    clear: both;
+    color: #fff;
+    display: table;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    padding: 0 2em;
+    text-align: center;
+}
+.day {
+    display: table-cell;
+    width: 113px;
+}
+.banner_weatherstack {
+    margin-left: 15%;
+}
+.banner_heading {
+    margin-left: 15%;
+    color: #fff;
+    font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
+}
+.banner_predicthq {
+    margin-left: 127%;
+    margin-top: -23%
+}
+#mapid {
+    height: 350px
+}
+.locMap {
+    margin-left: 20%
+}
