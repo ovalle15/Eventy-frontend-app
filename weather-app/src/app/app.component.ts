@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import countries from './_files/countries.json';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,5 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'weather-app';
+  public countryList:{name:string, code:string}[] = countries;
 }

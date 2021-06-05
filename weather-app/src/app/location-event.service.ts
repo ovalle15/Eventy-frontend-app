@@ -9,13 +9,15 @@ export class LocationEventService {
 
   constructor(private http: HttpClient) { }
 
-  getEventsForScope(cityEvent: any, fromDate:any, toDate:any){
+  getEventsForScope(cityEvent: any, countryCode: any, fromDate:any, toDate:any){
    return this.http.get(
      'https://app.ticketmaster.com/discovery/v2/events.json?size=6&sort=date,desc&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5' +
       "&startDateTime=" + fromDate +
       "&endDateTime=" + toDate +
-      "&city=" + cityEvent
+      "&city=" + cityEvent +
+      "&countryCode=" + countryCode
     );
  }
 
 }
+//countryCode

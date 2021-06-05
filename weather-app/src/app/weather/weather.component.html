@@ -8,11 +8,10 @@
           integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
           crossorigin=""></script>
       <br>
-      <!-- <h1>Eventlyify?</h1> -->
       <img class="banner_weatherstack" src="https://weatherstack.com/site_images/weatherstack_logo_footer.png">
       <img class="banner_predicthq" src="https://docs.predicthq.com/img/logo.png">
 
-      <form [formGroup]="weatherSearchForm" (ngSubmit)="sendToWeatherStack(weatherSearchForm.value); sendEvents()">
+      <form [formGroup]="weatherSearchForm" (ngSubmit)="sendToWeatherStack(weatherSearchForm.value)">
         <div>
           <input
             type="text"
@@ -26,7 +25,7 @@
           </button>
         </div>
       </form>
-      <div class="weather-animated" *ngIf="this.weatherData && this.eventsToDisplay; else elseBlock">
+      <div class="weather-animated" *ngIf="this.weatherData && ((this.eventsToDisplayFinal || {})[0] || {}); else elseBlock">
         <div class="location_top_box" >
           {{this.weatherData?.location.name}}, {{this.weatherData?.location.region}},{{this.weatherData?.location.country}}
         </div>
@@ -72,23 +71,22 @@
               {{this.weatherData?.current.weather_descriptions[0]}}
             </a>
           </div>
-        <ng-template #thunderBlock>
-          <div class="current_left" *ngIf="this.weatherData?.current.weather_descriptions[0] === 'Thunderstorm' ||
-                                    this.weatherData?.current.weather_descriptions[0] === 'Rain With Thunderstorm, Drizzle';
-                                      else ElseBlock">
-            <a>
-              <img class="svg_scaling" src="assets/svgs/thunder.svg">
-              <h1>{{this.weatherData?.current.temperature}}
-                <span>
-                  &#176;
-                </span>
-                F
-              </h1>
-              {{this.weatherData?.current.weather_descriptions[0]}}
-            </a>
-          </div>
-        </ng-template>
-
+          <ng-template #thunderBlock>
+            <div class="current_left" *ngIf="this.weatherData?.current.weather_descriptions[0] === 'Thunderstorm' ||
+                                      this.weatherData?.current.weather_descriptions[0] === 'Rain With Thunderstorm, Drizzle';
+                                        else ElseBlock">
+              <a>
+                <img class="svg_scaling" src="assets/svgs/thunder.svg">
+                <h1>{{this.weatherData?.current.temperature}}
+                  <span>
+                    &#176;
+                  </span>
+                  F
+                </h1>
+                {{this.weatherData?.current.weather_descriptions[0]}}
+              </a>
+            </div>
+          </ng-template>
         </ng-template>
 
         <ng-template #ElseBlock>
@@ -221,44 +219,52 @@
         <div id="mapid">
         </div>
 
-        <div class="weather-animated-left">
+        <div class="weather-animated-left" *ngIf="this.eventsToDisplayFinal; else NoEvents">
           <h3>
             Things To Do Today and Tomorrow in : {{this.weatherData?.location.name}}
           </h3>
-          <div *ngFor="let event of this.eventsToDisplay">
+          <div *ngFor="let event of this.eventsToDisplayFinal">
             <li>
-                <h4>
-                  {{event.name}}
-                </h4>
-                <br *ngIf="event.info">
-                  Event Info: {{event.info}}
+              <h4>
+                {{event.name}}
+              </h4>
+              <p *ngIf="event.info; else noInfo">
+                Event Info: {{event.info}}
                 <br>
-                  Day : {{event.dates.start.localDate}}
-                  <br>
-                  Time : {{event.dates.start.localTime}}
+                Day : {{event.dates.start.localDate}}
                 <br>
-                <p *ngIf="event._embedded.venues ; else elseBlock">
-                  Venue : {{event._embedded.venues[0].name}}
-                  <br>
-                  Address : {{event._embedded.venues[0].address.line1}}
-                </p>
+                Time : {{event.dates.start.localTime}}
+              </p>
+              <ng-template #noInfo>
+                Event Info: No info avialable
+              </ng-template>
+              <p *ngIf="event._embedded.venues ; else noVenue">
+                Venue : {{event._embedded.venues[0].name}}
                 <br>
-                <span *ngIf="event._embedded.venues[0].location;  else elseBlock">
-                  <button class="locMap" (click) = "showOnMap(event._embedded.venues[0].location)">
-                    Display Location
-                  </button>
-                </span>
-                <br>
-                <ng-template #elseBlock>
-                  <a>
-                    No event address found
-                  </a>
-                </ng-template>
-                <br>
-              </li>
+                Address : {{event._embedded.venues[0].address.line1}}
+              </p>
+              <ng-template #noVenue>
+                No venue avialable
+              </ng-template>
+              <br>
+              <span *ngIf="event._embedded.venues[0].location;  else elseBlock">
+                <button class="locMap" (click) = "showOnMap(event._embedded.venues[0].location)">
+                  Display Location
+                </button>
+              </span>
+              <br>
+              <ng-template #elseBlock>
+                <a>
+                  No event address found
+                </a>
+              </ng-template>
+              <br>
+            </li>
           </div>
         </div>
-
+        <ng-template  #NoEvents>
+          No events to display
+        </ng-template>
       </div>
 
       <ng-template  #elseBlock>

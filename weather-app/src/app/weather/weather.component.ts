@@ -1,8 +1,8 @@
 import { Component, OnInit, Inject } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms'
 import { WeatherStackService } from "../weatherstack.service";
-import {Events} from "../weather-history.service";
 import { LocationEventService } from '../location-event.service';
+import countryList from '../_files/countries.json';
 import { icon, Marker } from 'leaflet';
 import * as L from  'leaflet';
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
@@ -34,6 +34,7 @@ export class WeatherComponent implements OnInit  {
   public currentDate: any = new Date();
   public eventScopeId: any;
   public eventsToDisplay: any;
+  public eventsToDisplayFinal : any;
   public loc: any;
   public eventDateToday: any = new Date();
   public dayUnique: any = new Date().getDate()
@@ -42,13 +43,15 @@ export class WeatherComponent implements OnInit  {
   public stateEvent: any;
   public cityEvent: any;
   public dateForEvents: any = new Date();
-  public dateForEventsNext: any = new Date()
+  public dateForEventsNext: any = new Date();
+  public country: any;
+  public countryCode: any;
 
 
   constructor(
     private formBuilder: FormBuilder,
     private weatherService: WeatherStackService,
-    private eventPerLocations:  LocationEventService
+    private eventPerLocations:  LocationEventService,
     ){
     this.weatherSearchForm = this.formBuilder.group({
       location: ['Boston']
@@ -59,16 +62,13 @@ export class WeatherComponent implements OnInit  {
     this.dateForEvents = this.dateForEvents.toISOString().split('.')[0]+"Z";
     this.dateForEventsNext = this.dateForEventsNext.setDate(this.dateForEventsNext.getDate() + 1)
     this.dateForEventsNext = new Date(this.dateForEventsNext).toISOString().split('.')[0]+"Z"
-
-    console.log("this is today", this.dateForEvents)
-    console.log("this is tomorrow", this.dateForEventsNext)
-
     this.currentDate = this.formatDate(this.currentDate)
-    console.log("this is the date format", this.currentDate)
     this.weatherSearchForm = this.formBuilder.group({
       location: ['Boston']
     });
+
   }
+
 
   formatDate(currentDate: any ) {
     var d = new Date(currentDate),
@@ -81,16 +81,17 @@ export class WeatherComponent implements OnInit  {
 
   sendToWeatherStack(formValues: any) {
     this.loc = formValues.location;
-    console.log("formValues.location", formValues.location)
     console.log("this is currentDate send to weatherStack", this.currentDate)
     this.weatherService
       .getWeather(formValues.location, this.currentDate, this.currentDate)
       .subscribe(data => {
         this.weatherData = data;
-        console.log("this is weather data", this.weatherData)
+        this.country = this.weatherData.location.country
+        this.findCountryCodes();
+        this.sendEvents();
       });
-  }
 
+  }
   sendEvents() {
     console.log("before: this is the map", this.map);
     if (this.map){
@@ -102,17 +103,24 @@ export class WeatherComponent implements OnInit  {
     this.sendEventsPerLocation();
   }
 
+  findCountryCodes() {
+    console.log("this is this country in findCountryCodes ==> ", this.country)
+    for (const e in  Object.keys(countryList)) {
+        this.countryCode = (countryList[e].Name === this.country) ? countryList[e].Code : "";
+      }
+    }
   sendEventsPerLocation() {
-    this.eventPerLocations
-      .getEventsForScope(this.loc, this.dateForEvents , this.dateForEventsNext)
-      .subscribe(e => {
-        this.eventsToDisplay = e;
-        this.eventsToDisplay = this.eventsToDisplay._embedded.events
-        console.log("events ===>",this.eventsToDisplay)
-        if (this.eventsToDisplay.length === 0) {
-          window.alert("No events were found for this location")
-        }
-      })
+    console.log("this is countryCode=", this.countryCode, "  this is loc=", this.loc)
+      this.eventPerLocations
+        .getEventsForScope(this.loc, this.countryCode ,this.dateForEvents , this.dateForEventsNext)
+        .subscribe(e => {
+          this.eventsToDisplay = e;
+          this.eventsToDisplayFinal = ((this.eventsToDisplay || {})._embedded || {}).events || []
+          console.log("eventsToDisplayFinal ===>",this.eventsToDisplayFinal)
+          if (this.eventsToDisplayFinal.length === 0) {
+            window.alert("No events were found for this location")
+          }
+        })
   }
 
   showOnMap(pos: any) {
