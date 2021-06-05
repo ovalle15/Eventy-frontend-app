@@ -1,5 +1,7 @@
 import { Injectable } from '@angular/core';
 import {HttpClient} from  '@angular/common/http';
+import { environment } from 'src/environments/environment.prod';
+
 
 
 @Injectable({
@@ -11,7 +13,7 @@ export class LocationEventService {
 
   getEventsForScope(cityEvent: any, countryCode: any, fromDate:any, toDate:any){
    return this.http.get(
-     'https://app.ticketmaster.com/discovery/v2/events.json?size=6&sort=date,desc&apikey=tGRcyK1rm7xtXQL9UYzBJRN5bs3f2mi5' +
+     'https://app.ticketmaster.com/discovery/v2/events.json?size=6&sort=date,desc&apikey=' + environment.TICKETMASTER_KEY +
       "&startDateTime=" + fromDate +
       "&endDateTime=" + toDate +
       "&city=" + cityEvent +

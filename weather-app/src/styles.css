@@ -168,8 +168,9 @@ input[type=text]:focus {
     font-family: "Open Sans","Gill Sans MT","Gill Sans",Corbel,Arial,sans-serif;
 }
 .banner_predicthq {
-    margin-left: 127%;
-    margin-top: -23%
+    margin-left: 117%;
+    margin-top : -66%;
+    margin-bottom: -23%
 }
 #mapid {
     height: 350px

@@ -4,10 +4,11 @@ import { WeatherStackService } from "../weatherstack.service";
 import { LocationEventService } from '../location-event.service';
 import countryList from '../_files/countries.json';
 import { icon, Marker } from 'leaflet';
+import {environment} from '../../environments/environment.prod';
 import * as L from  'leaflet';
-const iconRetinaUrl = 'assets/marker-icon-2x.png';
-const iconUrl = 'assets/marker-icon.png';
-const shadowUrl = 'assets/marker-shadow.png';
+const iconRetinaUrl = 'assets/pngs/marker-icon-2x.png';
+const iconUrl = 'assets/pngs/marker-icon.png';
+const shadowUrl = 'assets/pngs/marker-shadow.png';
 
 const iconDefault = icon({
   iconRetinaUrl,
@@ -134,7 +135,7 @@ export class WeatherComponent implements OnInit  {
       }
 
       this.map = L.map('mapid').setView([pos[1], pos[0]], 13)
-      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=pk.eyJ1IjoiYW92YWxsZTE1IiwiYSI6ImNrbzAxZ2kyMjAzZmgybm1iNW9rbXVvcWUifQ.jpD4Tb1EBDzz_--0J2AwAw', {
+      L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=' + environment.MAPBOX_KEY , {
           maxZoom: 27,
           attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
               '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
