@@ -1,7 +1,7 @@
 # Eventy-frontend-app
 
 
-![demo](../src/assets/demon/angularEventy.gif)
+![demo](angularEventy.gif)
 
 Eventy is a frontend application built with Angular. The application uses three different APIs:  weatherstack , ticketmaster and mapbox.
 
