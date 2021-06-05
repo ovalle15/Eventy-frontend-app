@@ -65,7 +65,7 @@ export class WeatherComponent implements OnInit  {
     this.dateForEventsNext = new Date(this.dateForEventsNext).toISOString().split('.')[0]+"Z"
     this.currentDate = this.formatDate(this.currentDate)
     this.weatherSearchForm = this.formBuilder.group({
-      location: ['Boston']
+      location: []
     });
 
   }
