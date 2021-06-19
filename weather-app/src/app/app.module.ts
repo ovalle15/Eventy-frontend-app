@@ -13,11 +13,6 @@ import { DateformattingPipe } from './weather/dateformatting.pipe';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 
-
-
-
-
-
 @NgModule({
   declarations: [
     AppComponent,
