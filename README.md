@@ -13,5 +13,5 @@ Eventy is a frontend application built with Angular. The application uses three 
 
 ### For docker installation: 
 
-1) docker pull aolc543/eventy-frontend-app:latest
-2) docker run -dp 3000:3000 getting-started
+1) docker pull aolc543/eventy-frontend-app
+2) docker run -d -p 80:80 aolc543/eventy-frontend-app
