@@ -5,6 +5,8 @@
 
 Eventy is a frontend application built with Angular. The application uses three different APIs:  weatherstack , ticketmaster and mapbox.
 
+## Live app: https://eventy-app-angular.herokuapp.com/
+
 ### To install the application :
 
 1) npm i
