@@ -1,9 +1,11 @@
 # Eventy-frontend-app
 
+Search events (venues that use ticketmaster) at specific locations in the world !! Also get the weather for the day and a map of the event location.
+
+Eventy is a frontend application built with Angular. The application uses three different APIs:  weatherstack , ticketmaster and mapbox.
 
 ![demo](angularEventy.gif)
 
-Eventy is a frontend application built with Angular. The application uses three different APIs:  weatherstack , ticketmaster and mapbox.
 
 ### To install the application :
 
